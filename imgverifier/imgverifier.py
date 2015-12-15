@@ -5,7 +5,7 @@ from PIL import Image
 
 try:
     from os import scandir
-except ImportError:
+except ImportError:   # pragma: no cover
     from scandir import scandir
 
 
@@ -30,10 +30,10 @@ class ImageVerifier(object):
         """
         filenames = [fn for fn in scandir(imgdir)
                      if os.path.splitext(fn.path)[1].upper() in exts]
-        
+
         corrupt_images = []
         for fn in filenames:
-            try:
+            try:   # pragma: no cover
                 img = Image.open(fn.path)
                 img.verify()
             except Exception as e:

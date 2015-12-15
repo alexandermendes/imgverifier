@@ -4,7 +4,7 @@ from idlelib.WidgetRedirector import WidgetRedirector
 
 try:
     import tkinter as tk
-except ImportError:
+except ImportError:        # pragma: no cover
     import Tkinter as tk
 
 

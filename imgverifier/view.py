@@ -8,7 +8,7 @@ from imgverifier.read_only_text import ReadOnlyText
 try:
     import tkinter as tk
     import tkinter.filedialog as tkFileDialog
-except ImportError:
+except ImportError:   # pragma: no cover
     import Tkinter as tk
     import tkFileDialog
  
@@ -52,7 +52,7 @@ class View(tk.Tk):
         check_btn.grid(column=3, row=1, **grid_opts)
        
  
-    def on_check_dir(self):
+    def on_check_dir(self):   # pragma: no cover
         """Ask for an image directory and check it for corrupt images."""
         def worker():
             exts = ['.{}'.format(e.strip().upper())
@@ -95,15 +95,15 @@ class View(tk.Tk):
         n = len(self.corrupt_images)
         if n == 0:
             self.text.insert(tk.END, 'all files were verified')
-        elif n == 1:
+        elif n == 1:   # pragma: no cover
             self.text.insert(tk.END, "{} file couldn't be verified.".format(n))
-        else:
+        else:   # pragma: no cover
             self.text.insert(tk.END, "{} files couldn't be verified.".format(n))
         
         self.text.see(tk.END)
 
  
-    def on_save(self):
+    def on_save(self):   # pragma: no cover 
         """Save the list of non-images to a text file."""
         opts = {'title':  'Save',
                 'filetypes': [('Text File', '.txt')],
