@@ -2,8 +2,8 @@
 
 import os
 import threading
-from imgverifier import ImageVerifier
-from read_only_text import ReadOnlyText
+from imgverifier.imgverifier import ImageVerifier
+from imgverifier.read_only_text import ReadOnlyText
  
 try:
     import tkinter as tk
