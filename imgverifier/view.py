@@ -19,6 +19,7 @@ class View(tk.Tk):
         self.resizable(0,0)
         self.title("Image Verifier")
         self.corrupt_images = []
+        self.abort = False
  
         self.ext_var = tk.StringVar(self, 'tiff,tif,jpg,jpeg')
  
@@ -29,10 +30,8 @@ class View(tk.Tk):
        
         self.ext = tk.Entry(f2, textvariable=self.ext_var)
         ext_lbl = tk.Label(f2, text='Extensions:')
-        check_btn = tk.Button(f2, text="Run",
-                              command=self.on_check_dir, width=15)
-        save_btn = tk.Button(f2, text="Save",
-                             command=self.on_save, width=15)
+        self.run_btn = tk.Button(f2, text="Run", command=self.on_run, width=15)
+        save_btn = tk.Button(f2, text="Save", command=self.on_save, width=15)
  
         grid_opts = {'padx': 20, 'pady': 5, 'sticky': 'e'}
         f1.pack(anchor=tk.N, fill=tk.BOTH, expand=True, side=tk.TOP)
@@ -42,31 +41,44 @@ class View(tk.Tk):
         ext_lbl.grid(column=0, row=1, **grid_opts)
         self.ext.grid(column=1, row=1)
         save_btn.grid(column=2, row=1, **grid_opts)
-        check_btn.grid(column=3, row=1, **grid_opts)
+        self.run_btn.grid(column=3, row=1, **grid_opts)
        
  
-    def on_check_dir(self):   # pragma: no cover
-        """Ask for an image directory and check it for corrupt images."""
-        exts = ['.{}'.format(e.strip().upper())
+    def on_run(self):   # pragma: no cover
+        """Run or abort the checking of a directory for valid images."""
+        if self.run_btn['text'] == "Run":
+            self.run_btn['text'] = "Abort"
+            self.abort = False
+
+            exts = ['.{}'.format(e.strip().upper())
                 for e in self.ext_var.get().split(',') if len(e.strip()) > 0]
        
-        basedir = tkFileDialog.askdirectory()
-        if basedir:
-            self.console.clear()
-                
-            def worker():
-                verified = ImageVerifier.verify_gen(basedir, exts)
-                
-                for imgdir, path in verified:
-                    self.corrupt_images += path
-                    msg = self.get_report(imgdir, path)
+            basedir = tkFileDialog.askdirectory()
+            if basedir:
+                self.console.clear()
+                    
+                def worker():
+                    verified = ImageVerifier.verify_gen(basedir, exts)
+                    
+                    for imgdir, path in verified:
+                        if self.abort:
+                            self.console.write('\nABORTED')
+                            return
+                        
+                        self.corrupt_images += path
+                        msg = self.get_report(imgdir, path)
+                        self.console.write(msg)
+    
+                    msg = self.get_final_report()
                     self.console.write(msg)
-
-                msg = self.get_final_report()
-                self.console.write(msg)
-
-        t = threading.Thread(target=worker)
-        t.start()
+    
+            self.worker = threading.Thread(target=worker)
+            self.worker.start()
+            
+        else:
+            self.run_btn['text'] = "Run"
+            self.abort = True
+        
 
 
     def get_report(self, imgdir, paths):
