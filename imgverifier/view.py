@@ -27,12 +27,12 @@ class View(tk.Tk):
  
         scrollbar = tk.Scrollbar(self)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.text = ReadOnlyText(f1, yscrollcommand=scrollbar.set)
+        self.text = ReadOnlyText(f1, yscrollcommand=scrollbar.set, width=120)
         self.text.tag_config("ok", foreground="forest green")
         self.text.tag_config("error", foreground="red")
         scrollbar.config(command=self.text.yview)
        
-        self.ext = tk.Entry(f2, textvariable=self.ext_var, width=40)
+        self.ext = tk.Entry(f2, textvariable=self.ext_var)
         ext_lbl = tk.Label(f2, text='Extensions:')
         check_btn = tk.Button(f2, text="Run",
                               command=self.on_check_dir, width=15)
@@ -41,8 +41,7 @@ class View(tk.Tk):
  
         grid_opts = {'padx': 20, 'pady': 5, 'sticky': 'e'}
         f1.pack(anchor=tk.N, fill=tk.BOTH, expand=True, side=tk.TOP)
-        f1.rowconfigure(0, weight=1)
-        f2.pack(anchor=tk.E, fill=tk.BOTH, expand=True, side=tk.BOTTOM)
+        f2.pack(anchor=tk.E, side=tk.BOTTOM)
         f2.columnconfigure(1, weight=1)
         self.text.grid(column=0, row=0, **grid_opts)
         ext_lbl.grid(column=0, row=1, **grid_opts)
