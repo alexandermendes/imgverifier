@@ -28,7 +28,7 @@ class View(tk.Tk):
         scrollbar = tk.Scrollbar(self)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.text = ReadOnlyText(f1, yscrollcommand=scrollbar.set)
-        self.text.tag_config("ok", foreground="green")
+        self.text.tag_config("ok", foreground="forest green")
         self.text.tag_config("error", foreground="red")
         scrollbar.config(command=self.text.yview)
        
