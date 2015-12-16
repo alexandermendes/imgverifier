@@ -16,34 +16,37 @@ class ImageVerifier(object):
     @classmethod
     def verify_gen(self, imgdir, exts):
         """Check that all files in a directory are valid images.
-        
+
         Parameters
         ----------
         exts : list of str
             The extensions representing the file types to validate.
-        
+
         Yields
         ------
         tuple (str, list of str)
             The path of the directory and any filenames within that directory
             that couldn't be verified as images.
         """
-        filenames = [fn for fn in scandir(imgdir)
-                     if os.path.splitext(fn.path)[1].upper() in exts]
+        non_images = []
+        filenames = []
+        dirs = []
+        for f in scandir(imgdir):
+            if f.is_dir():
+                dirs.append(f)
+            elif os.path.splitext(f.path)[1].upper() in exts:
+                filenames.append(f)
 
-        corrupt_images = []
         for fn in filenames:
             try:
                 img = Image.open(fn.path)
                 img.verify()
             except Exception:
-                corrupt_images.append(fn.name)
-                
-        yield (imgdir, corrupt_images)
-        
-        dirs = [d for d in scandir(imgdir) if d.is_dir()]
+                non_images.append(fn.name)
+
+        yield (imgdir, non_images)
+
         for d in dirs:
             gen = (t for t in ImageVerifier.verify_gen(d.path, exts))
             for p in gen:
                 yield p
-        
