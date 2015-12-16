@@ -2,8 +2,11 @@
 
 import os
 import pytest
+import time
 from imgverifier.verifier import ImageVerifier
 from imgverifier.view import View
+from imgverifier.console import ThreadSafeConsole
+import Queue
 
 try:
     import tkinter as tk
@@ -48,43 +51,46 @@ class TestImageVerifier():
 
 
     def test_report_ok(self, tk_app):
-        tk_app.text.delete(1.0, tk.END)
-        tk_app.report('dir', [])
-        text = tk_app.text.get('1.0', 'end-1c')
+        tk_app.console.delete(1.0, tk.END)
+        text = tk_app.get_report('dir', [])
         
         assert text.startswith('dir...OK')
 
 
     def test_report_error(self, tk_app):
-        tk_app.text.delete(1.0, tk.END)
-        tk_app.report('dir', ['bad_image'])
-        text = tk_app.text.get('1.0', 'end-1c')
+        tk_app.console.delete(1.0, tk.END)
+        text = tk_app.get_report('dir', ['bad_image'])
         
         assert text.startswith('dir...ERROR')
 
 
-    def test_final_report_all_verified(self, tk_app):
-        tk_app.text.delete(1.0, tk.END)
+    def test_get_final_report_all_verified(self, tk_app):
+        tk_app.console.delete(1.0, tk.END)
         tk_app.corrupt_images = []
-        tk_app.final_report()
-        text = tk_app.text.get('1.0', 'end-1c')
+        text = tk_app.get_final_report()
         
         assert text.endswith('\nDONE...all files were verified.')
     
     
-    def test_final_report_one_error(self, tk_app):
-        tk_app.text.delete(1.0, tk.END)
+    def test_get_final_report_one_error(self, tk_app):
+        tk_app.console.delete(1.0, tk.END)
         tk_app.corrupt_images = ['error']
-        tk_app.final_report()
-        text = tk_app.text.get('1.0', 'end-1c')
+        text = tk_app.get_final_report()
         
         assert text.endswith("\nDONE...1 file couldn't be verified.")
     
     
-    def test_final_report_multiple_errors(self, tk_app):
-        tk_app.text.delete(1.0, tk.END)
+    def test_get_final_report_multiple_errors(self, tk_app):
+        tk_app.console.delete(1.0, tk.END)
         tk_app.corrupt_images = ['error', 'error']
-        tk_app.final_report()
-        text = tk_app.text.get('1.0', 'end-1c')
+        text = tk_app.get_final_report()
         
         assert text.endswith("\nDONE...2 files couldn't be verified.")
+    
+    
+    def test_write_to_console(self):
+        console = ThreadSafeConsole()
+        
+        console.write('hello')
+
+        assert console.get('1.0', 'end-1c') == "hello"

@@ -2,7 +2,7 @@
 
 import threading
 from imgverifier.verifier import ImageVerifier
-from imgverifier.read_only_text import ReadOnlyText
+from imgverifier.console import ThreadSafeConsole
  
 try:
     import tkinter as tk
@@ -25,12 +25,7 @@ class View(tk.Tk):
         f1 = tk.Frame(self)
         f2 = tk.Frame(self)
  
-        scrollbar = tk.Scrollbar(self)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.text = ReadOnlyText(f1, yscrollcommand=scrollbar.set, width=120)
-        self.text.tag_config("ok", foreground="forest green")
-        self.text.tag_config("error", foreground="red")
-        scrollbar.config(command=self.text.yview)
+        self.console = ThreadSafeConsole(f1, width=120)
        
         self.ext = tk.Entry(f2, textvariable=self.ext_var)
         ext_lbl = tk.Label(f2, text='Extensions:')
@@ -43,7 +38,7 @@ class View(tk.Tk):
         f1.pack(anchor=tk.N, fill=tk.BOTH, expand=True, side=tk.TOP)
         f2.pack(anchor=tk.E, side=tk.BOTTOM)
         f2.columnconfigure(1, weight=1)
-        self.text.grid(column=0, row=0, **grid_opts)
+        self.console.grid(column=0, row=0, **grid_opts)
         ext_lbl.grid(column=0, row=1, **grid_opts)
         self.ext.grid(column=1, row=1)
         save_btn.grid(column=2, row=1, **grid_opts)
@@ -52,56 +47,60 @@ class View(tk.Tk):
  
     def on_check_dir(self):   # pragma: no cover
         """Ask for an image directory and check it for corrupt images."""
-        def worker():
-            exts = ['.{}'.format(e.strip().upper())
-                    for e in self.ext_var.get().split(',')
-                    if len(e.strip()) > 0]
-           
-            basedir = tkFileDialog.askdirectory()
-            if basedir:
-                self.text.delete(1.0, tk.END)
+        exts = ['.{}'.format(e.strip().upper())
+                for e in self.ext_var.get().split(',') if len(e.strip()) > 0]
+       
+        basedir = tkFileDialog.askdirectory()
+        if basedir:
+            self.console.clear()
+                
+            def worker():
                 verified = ImageVerifier.verify_gen(basedir, exts)
                 
                 for imgdir, path in verified:
-                    self.report(imgdir, path)
                     self.corrupt_images += path
+                    msg = self.get_report(imgdir, path)
+                    self.console.write(msg)
 
-                self.final_report()
+                msg = self.get_final_report()
+                self.console.write(msg)
 
         t = threading.Thread(target=worker)
         t.start()
 
 
-    def report(self, imgdir, paths):
-        """Report the outcome of checking a directory."""        
-        self.text.insert(tk.INSERT, '{}...'.format(imgdir))
+    def get_report(self, imgdir, paths):
+        """Report the outcome of checking a directory."""
+        msg = '{}...'.format(imgdir)
         
         if len(paths) == 0:
-            self.text.insert(tk.INSERT, 'OK\n', ('ok'))
+            msg += 'OK'
         
         else:
-            self.text.insert(tk.INSERT, 'ERROR\n', ('error'))
-            for p in paths:
-                self.text.insert(tk.INSERT, '   -{0}\n'.format(p))
+            msg += 'ERROR'
 
-        self.text.see(tk.END)
+            for p in paths:
+                msg += '   -{0}\n'.format(p)
+        
+        return msg
  
  
-    def final_report(self):
-        self.text.insert(tk.END, '\nDONE...')
+    def get_final_report(self):
+        """Report the final outcome of checking a directory."""
+        msg = '\nDONE...'
         
         n = len(self.corrupt_images)
         if n == 0:
-            self.text.insert(tk.END, 'all files were verified.')
+            msg += 'all files were verified.'
         elif n == 1:
-            self.text.insert(tk.END, "{} file couldn't be verified.".format(n))
+            msg += "{} file couldn't be verified.".format(n)
         else:
-            self.text.insert(tk.END, "{} files couldn't be verified.".format(n))
+            msg += "{} files couldn't be verified.".format(n)
         
-        self.text.see(tk.END)
+        return msg
 
  
-    def on_save(self):   # pragma: no cover 
+    def on_save(self):   # pragma: no cover
         """Save the list of non-images to a text file."""
         opts = {'title':  'Save',
                 'filetypes': [('Text File', '.txt')],
