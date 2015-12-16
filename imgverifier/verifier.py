@@ -36,7 +36,7 @@ class ImageVerifier(object):
             try:
                 img = Image.open(fn.path)
                 img.verify()
-            except Exception as e:
+            except Exception:
                 corrupt_images.append(fn.path)
                 
         yield (os.path.basename(imgdir), corrupt_images)
