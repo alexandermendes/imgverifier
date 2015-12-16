@@ -2,11 +2,7 @@
 
 import os
 import pytest
-import time
 from imgverifier.verifier import ImageVerifier
-from imgverifier.view import View
-from imgverifier.console import ThreadSafeConsole
-import Queue
 
 try:
     import tkinter as tk
@@ -86,11 +82,3 @@ class TestImageVerifier():
         text = tk_app.get_final_report()
         
         assert text.endswith("\nDONE...2 files couldn't be verified.")
-    
-    
-    def test_write_to_console(self):
-        console = ThreadSafeConsole()
-        
-        console.write('hello')
-
-        assert console.get('1.0', 'end-1c') == "hello"
