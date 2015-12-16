@@ -19,7 +19,7 @@ def tk_app():
 
 
 @pytest.fixture
-def imgdir(tmpdir, tmpdir_factory):
+def imgdir(tmpdir):
     imgdir = tmpdir.mkdir('images')
     for i in range(5):
         fn = 'img_{}.txt'.format(i)
