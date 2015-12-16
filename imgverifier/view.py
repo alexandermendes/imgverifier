@@ -2,7 +2,7 @@
 
 import os
 import threading
-from imgverifier.imgverifier import ImageVerifier
+from imgverifier.verifier import ImageVerifier
 from imgverifier.read_only_text import ReadOnlyText
  
 try:

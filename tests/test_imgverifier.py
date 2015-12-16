@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 import pytest
-from imgverifier.imgverifier import ImageVerifier
+from imgverifier.verifier import ImageVerifier
 from imgverifier.view import View
 
 try:
