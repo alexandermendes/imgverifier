@@ -15,10 +15,12 @@ A very basic Tkinter application to verify images in a directory tree.
 
 [Download the latest release](https://github.com/alexandermendes/imgverifier/releases)
 
-Click **Run** and choose a root directory to recursively search for files that cannot be
-validated as images.
+The controls work as follows:
 
-A comma-separated list of extensions on which to attempt validation can be specified
-via the **Extensions** text field.
+- **Run**: Choose a root directory to recursively search for files that cannot be validated as images.
 
-Click **Save** to output any invalid images found to a text document.
+- **Abort**: Stop searching the directory.
+
+- **Extensions**: Specify a comma-separated list of extensions on which to attempt validation.
+
+- **Save**: Output the paths of any invalid images found to a text document.
