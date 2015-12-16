@@ -1,6 +1,5 @@
 # -*- coding: utf8 -*-
 
-import os
 import threading
 from imgverifier.verifier import ImageVerifier
 from imgverifier.read_only_text import ReadOnlyText
