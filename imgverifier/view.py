@@ -56,7 +56,7 @@ class View(tk.Tk):
             basedir = tkFileDialog.askdirectory()
             if basedir:
                 self.console.clear()
-                self.console.write('Starting...\n\n')
+                self.console.write('Starting...\n')
                     
                 def worker():
                     verified = ImageVerifier.verify_gen(basedir, exts)
@@ -72,6 +72,9 @@ class View(tk.Tk):
     
                     msg = self.get_final_report()
                     self.console.write(msg)
+                    
+                    self.run_btn['text'] = "Run"
+                    self.abort = True
     
             self.worker = threading.Thread(target=worker)
             self.worker.start()
@@ -84,7 +87,7 @@ class View(tk.Tk):
 
     def get_report(self, imgdir, paths):
         """Report the outcome of checking a directory."""
-        msg = '{}...'.format(imgdir)
+        msg = '{}...'.format(imgdir.replace('\\', '/'))
         if len(paths) == 0:
             msg += 'OK'
         

@@ -48,11 +48,15 @@ class ThreadSafeConsole(ScrolledText):
                     if len(parts) > 1:
                         suffix = str(parts[1]) 
                         self.insert(tk.END, '...')
-                        if suffix == 'OK':
-                            self.insert(tk.END, suffix, ('ok'))
+                        if suffix.endswith('OK'):
+                            suffix = suffix.replace('OK', '')
+                            self.insert(tk.END, suffix)
+                            self.insert(tk.END, 'OK', ('ok'))
                         elif suffix.startswith('ERROR'):
                             suffix = suffix.replace('ERROR', '')
                             self.insert(tk.END, 'ERROR', ('error'))
+                            self.insert(tk.END, suffix)
+                        else:
                             self.insert(tk.END, suffix)
                         self.insert(tk.END, '\n')
 
