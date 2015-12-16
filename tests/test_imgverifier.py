@@ -41,7 +41,7 @@ class TestImageVerifier():
     def test_bad_images_identified_in_sub_dirs(self, imgdir):
         base = os.path.dirname(str(imgdir))
         data = [d for d in ImageVerifier.verify_gen(base, ['.TXT'])
-                if d[0] == 'images']
+                if d[0].endswith('/images')]
 
         assert len(data[0][1]) == 5
 

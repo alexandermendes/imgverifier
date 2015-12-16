@@ -56,6 +56,7 @@ class View(tk.Tk):
             basedir = tkFileDialog.askdirectory()
             if basedir:
                 self.console.clear()
+                self.console.write('Starting...\n\n')
                     
                 def worker():
                     verified = ImageVerifier.verify_gen(basedir, exts)
@@ -91,7 +92,7 @@ class View(tk.Tk):
             msg += 'ERROR'
 
             for p in paths:
-                msg += '\n   -{0}'.format(p)
+                msg += '\n   - {0}'.format(p)
         
         return msg
  

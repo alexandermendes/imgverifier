@@ -25,8 +25,8 @@ class ImageVerifier(object):
         Yields
         ------
         tuple (str, list of str)
-            The base directory and any paths within that directory that couldn't
-            be verified as images.
+            The path of the directory and any filenames within that directory
+            that couldn't be verified as images.
         """
         filenames = [fn for fn in scandir(imgdir)
                      if os.path.splitext(fn.path)[1].upper() in exts]
@@ -37,9 +37,9 @@ class ImageVerifier(object):
                 img = Image.open(fn.path)
                 img.verify()
             except Exception:
-                corrupt_images.append(fn.path)
+                corrupt_images.append(fn.name)
                 
-        yield (os.path.basename(imgdir), corrupt_images)
+        yield (imgdir, corrupt_images)
         
         dirs = [d for d in scandir(imgdir) if d.is_dir()]
         for d in dirs:
