@@ -60,13 +60,13 @@ class View(tk.Tk):
                 def worker():
                     verified = ImageVerifier.verify_gen(basedir, exts)
                     
-                    for imgdir, path in verified:
+                    for imgdir, paths in verified:
                         if self.abort:
                             self.console.write('\nABORTED')
                             return
                         
-                        self.corrupt_images += path
-                        msg = self.get_report(imgdir, path)
+                        self.corrupt_images += paths
+                        msg = self.get_report(imgdir, paths)
                         self.console.write(msg)
     
                     msg = self.get_final_report()
@@ -84,7 +84,6 @@ class View(tk.Tk):
     def get_report(self, imgdir, paths):
         """Report the outcome of checking a directory."""
         msg = '{}...'.format(imgdir)
-        
         if len(paths) == 0:
             msg += 'OK'
         
@@ -92,7 +91,7 @@ class View(tk.Tk):
             msg += 'ERROR'
 
             for p in paths:
-                msg += '   -{0}\n'.format(p)
+                msg += '\n   -{0}'.format(p)
         
         return msg
  

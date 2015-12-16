@@ -47,21 +47,24 @@ class TestImageVerifier():
 
 
     def test_report_ok(self, tk_app):
-        tk_app.console.delete(1.0, tk.END)
         text = tk_app.get_report('dir', [])
         
         assert text.startswith('dir...OK')
 
 
     def test_report_error(self, tk_app):
-        tk_app.console.delete(1.0, tk.END)
         text = tk_app.get_report('dir', ['bad_image'])
         
         assert text.startswith('dir...ERROR')
+    
+    
+    def test_report_error_paths(self, tk_app):
+        text = tk_app.get_report('dir', ['bad_image'])
+        
+        assert text.endswith('bad_image')
 
 
     def test_get_final_report_all_verified(self, tk_app):
-        tk_app.console.delete(1.0, tk.END)
         tk_app.corrupt_images = []
         text = tk_app.get_final_report()
         
@@ -69,7 +72,6 @@ class TestImageVerifier():
     
     
     def test_get_final_report_one_error(self, tk_app):
-        tk_app.console.delete(1.0, tk.END)
         tk_app.corrupt_images = ['error']
         text = tk_app.get_final_report()
         
@@ -77,7 +79,6 @@ class TestImageVerifier():
     
     
     def test_get_final_report_multiple_errors(self, tk_app):
-        tk_app.console.delete(1.0, tk.END)
         tk_app.corrupt_images = ['error', 'error']
         text = tk_app.get_final_report()
         
