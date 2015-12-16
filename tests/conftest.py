@@ -14,14 +14,25 @@ except ImportError:
 
 
 @pytest.fixture(scope='session')
-def app():
+def tk_app():
     return View()
 
 
 @pytest.fixture
-def imgdir(tmpdir):
+def imgdir(tmpdir, tmpdir_factory):
     imgdir = tmpdir.mkdir('images')
     for i in range(5):
-        fn = 'img_{}.jpg'.format(i)
-        imgdir.join(fn).write('content')
-    return str(tmpdir)
+        fn = 'img_{}.txt'.format(i)
+        imgdir.join(fn).write("content")
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    fn = imgdir.join('img.jpg')
+    image.save(str(fn))
+    return str(imgdir)
+
+
+
+def create_image(tmpdir_factory):
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    fn = tmpdir_factory.mktemp('images').join('img.png')
+    image.save(str(fn))
+    return tmp

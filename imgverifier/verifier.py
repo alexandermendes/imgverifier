@@ -33,7 +33,7 @@ class ImageVerifier(object):
 
         corrupt_images = []
         for fn in filenames:
-            try:   # pragma: no cover
+            try:
                 img = Image.open(fn.path)
                 img.verify()
             except Exception as e:

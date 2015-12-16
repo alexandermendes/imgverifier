@@ -94,10 +94,10 @@ class View(tk.Tk):
         
         n = len(self.corrupt_images)
         if n == 0:
-            self.text.insert(tk.END, 'all files were verified')
-        elif n == 1:   # pragma: no cover
+            self.text.insert(tk.END, 'all files were verified.')
+        elif n == 1:
             self.text.insert(tk.END, "{} file couldn't be verified.".format(n))
-        else:   # pragma: no cover
+        else:
             self.text.insert(tk.END, "{} files couldn't be verified.".format(n))
         
         self.text.see(tk.END)
