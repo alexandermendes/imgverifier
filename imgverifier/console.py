@@ -1,14 +1,15 @@
 # -*- coding: utf8 -*-
 
-import Queue
 from idlelib.WidgetRedirector import WidgetRedirector
 
 try:
     import tkinter as tk
-    from tkinter.ScrolledText import ScrolledText
+    from tkinter.scrolledtext import ScrolledText
+    import queue
 except ImportError:   # pragma: no cover
     import Tkinter as tk
     from ScrolledText import ScrolledText
+    import Queue as queue
 
 
 class ThreadSafeConsole(ScrolledText):
@@ -22,7 +23,7 @@ class ThreadSafeConsole(ScrolledText):
         self.redir = WidgetRedirector(self)
         self.insert = self.redir.register("insert", lambda *args, **kw: "break")
         self.delete = self.redir.register("delete", lambda *args, **kw: "break")
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self.update()
 
 
@@ -54,6 +55,6 @@ class ThreadSafeConsole(ScrolledText):
 
                 self.see(tk.END)
                 self.update_idletasks()
-        except Queue.Empty:
+        except queue.Empty:
             pass
         self.after(100, self.update)
