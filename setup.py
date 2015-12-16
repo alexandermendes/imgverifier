@@ -23,7 +23,7 @@ test_requirements = [
 
 setup(
     name='imgverifier',
-    version='1.0.0',
+    version='1.1.0',
     author='Alexander Mendes',
     author_email='alexanderhmendes@gmail.com',
     description='Assists in preperation of BL digital assets for DLS ingest.',
