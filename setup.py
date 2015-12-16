@@ -23,7 +23,7 @@ test_requirements = [
 
 setup(
     name='imgverifier',
-    version='0.0.1',
+    version='1.0.0',
     author='Alexander Mendes',
     author_email='alexanderhmendes@gmail.com',
     description='Assists in preperation of BL digital assets for DLS ingest.',
@@ -37,7 +37,7 @@ setup(
     install_requires=install_requirements,
     setup_requires=setup_requirements,
     classifiers=[
-        "Development Status :: 4 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Other Audience",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
