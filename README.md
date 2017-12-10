@@ -1,12 +1,7 @@
 # imgverifier
 
-[![Build Status]
-(https://travis-ci.org/alexandermendes/imgverifier.svg?branch=master)]
-(https://travis-ci.org/alexandermendes/imgverifier) [![Coverage Status]
-(https://coveralls.io/repos/alexandermendes/imgverifier/badge.svg?branch=master&service=github)]
-(https://coveralls.io/github/alexandermendes/imgverifier?branch=master) [![Code Health]
-(https://landscape.io/github/alexandermendes/imgverifier/master/landscape.svg?style=flat)]
-(https://landscape.io/github/alexandermendes/imgverifier/master)
+[![Build Status](https://travis-ci.org/alexandermendes/imgverifier.svg?branch=master)](https://travis-ci.org/alexandermendes/imgverifier) [![Coverage Status](https://coveralls.io/repos/alexandermendes/imgverifier/badge.svg?branch=master&service=github)](https://coveralls.io/github/alexandermendes/imgverifier?branch=master) 
+[![Code Health](https://landscape.io/github/alexandermendes/imgverifier/master/landscape.svg?style=flat)](https://landscape.io/github/alexandermendes/imgverifier/master)
 
 A very basic Tkinter application to verify images in a directory tree.
 
